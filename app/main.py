@@ -31,6 +31,8 @@ app.include_router(sms_router)
 app.include_router(chat_router)
 app.include_router(waitlist_router)
 app.include_router(metrics_router)
+from app.routes_twilio_sms import router as sms_router
+app.include_router(sms_router)
 
 @app.get("/healthz")
 async def healthz():
