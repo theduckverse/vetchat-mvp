@@ -1,0 +1,67 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>VetChat — Friendly SMS support for Veterans (non‑clinical)</title>
+  <meta name="description" content="VetChat is a non-clinical, AI-powered SMS companion for U.S. Veterans.">
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;padding:0;line-height:1.5}
+    header{padding:48px 24px;text-align:center;background:#0f172a;color:#fff}
+    h1{margin:0;font-size:2rem}
+    main{max-width:760px;margin:0 auto;padding:24px}
+    .card{border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin:16px 0}
+    .cta{display:inline-block;background:#0f172a;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none}
+    footer{padding:24px;text-align:center;color:#6b7280}
+    input,button{font-size:1rem;padding:10px;border-radius:8px;border:1px solid #d1d5db}
+    form{display:flex;gap:8px;flex-wrap:wrap}
+    .disclaimer{font-size:0.9rem;color:#6b7280}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>VetChat</h1>
+    <p>Friendly, non‑clinical SMS support for Veterans—available 24/7.</p>
+    <p class="disclaimer">Not medical advice. If you're in crisis: <strong>Dial 988, then press 1</strong> (Veterans) or <strong>text 838255</strong>.</p>
+    <p><a class="cta" href="sms:+15551234567">Text “HELLO” to +1 (555) 123‑4567</a></p>
+  </header>
+  <main>
+    <div class="card">
+      <h2>How it works</h2>
+      <ol>
+        <li>Text us to start a private conversation.</li>
+        <li>Get practical resources (benefits, community, coping tips).</li>
+        <li>We never diagnose—and we always show crisis resources.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h2>Join the early access list</h2>
+      <form action="/waitlist" method="post">
+        <input name="email" type="email" placeholder="you@example.com" required>
+        <button>Request invite</button>
+      </form>
+      <p class="disclaimer">We only email about your access link and major updates.</p>
+    </div>
+  </main>
+  <footer>© 2025 VetChat — Non‑clinical support. Veterans Crisis Line: 988 → press 1, or text 838255.</footer>
+
+<script>
+(function(){
+  const params = new URLSearchParams(location.search);
+  const form = document.querySelector('form[action="/waitlist"]');
+  if (form){
+    ['utm_source','utm_medium','utm_campaign','utm_term','utm_content'].forEach(k=>{
+      const v = params.get(k);
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = k;
+      input.value = v || '';
+      form.appendChild(input);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
