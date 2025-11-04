@@ -1,20 +1,21 @@
-from fastapi import FastAPI
+# --- connectivity test (temporary) ---
+import os, httpx
+from fastapi import HTTPException
 
-# use package-relative imports
-from .routes_twilio_sms import router as sms_router
-from .chat_routes import router as chat_router
-from .metrics_routes import router as metrics_router
-from .waitlist_routes import router as waitlist_router
+@app.get("/ping-openai")
+async def ping_openai():
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="Missing OPENAI_API_KEY")
 
-app = FastAPI()
-
-# mount routers
-app.include_router(sms_router, prefix="/twilio", tags=["sms"])
-app.include_router(chat_router, prefix="/chat", tags=["chat"])
-app.include_router(metrics_router, prefix="/metrics", tags=["metrics"])
-app.include_router(waitlist_router, prefix="/waitlist", tags=["waitlist"])
-
-@app.get("/")
-def health():
-    return {"message": "Vetchat (WatchMy6) is running"}
-
+    try:
+        async with httpx.AsyncClient(timeout=10) as ac:
+            r = await ac.get(
+                "https://api.openai.com/v1/models",
+                headers={"Authorization": f"Bearer {api_key}"},
+            )
+        return {"status": r.status_code, "ok": r.status_code < 400}
+    except Exception as e:
+        # log and surface the exact error type/message
+        print("[PING OPENAI ERROR]", repr(e))
+        raise HTTPException(status_code=502, detail=f"Ping failed: {e}")
