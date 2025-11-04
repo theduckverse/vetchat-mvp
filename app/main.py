@@ -8,6 +8,7 @@ from .routes_twilio_sms import router as sms_router  # if you have it
 from .metrics_routes import router as metrics_router  # if you have it
 from .waitlist_routes import router as waitlist_router  # if you have it
 from .kofi_webhook import router as kofi_router
+app.include_router(kofi_router)
 
 
 app = FastAPI()
