@@ -43,6 +43,7 @@ async def ping_openai():
 
 # ---- mount your routers ----
 app.include_router(chat_router, prefix="/chat", tags=["chat"])
+app.include_router(kofi_router, tags=["kofi"])
 # app.include_router(sms_router, prefix="/twilio", tags=["sms"])
 # app.include_router(metrics_router, prefix="/metrics", tags=["metrics"])
 # app.include_router(waitlist_router, prefix="/waitlist", tags=["waitlist"])
