@@ -1,26 +1,15 @@
-
 import os
-from .prompts import SYSTEM_BASE
+from openai import AsyncOpenAI
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-async def chat_once(user: str, *, crisis: bool=False) -> str:
-    system = SYSTEM_BASE
-    if crisis:
-        system += ("\nCRISIS MODE: Be extra direct about immediate help. Provide "
-                   "Veterans Crisis Line: Dial 988 then press 1; text 838255.")
-    # Example using OpenAI's Python SDK (async)
-    if OPENAI_API_KEY:
-        from openai import AsyncOpenAI
-        client = AsyncOpenAI(api_key=OPENAI_API_KEY)
-        resp = await client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role":"system","content":system},
-                {"role":"user","content":user}
-            ],
-            temperature=0.4
-        )
-        return resp.choices[0].message.content.strip()
-    # Fallback stub (for dev without key)
-    return "Thanks for your message. (LLM not configured yet.) If you're in crisis: Dial 988 and press 1, or text 838255."
+async def chat_once(message: str, crisis: bool = False):
+    crisis_prompt = "The user may be in crisis. Be gentle, empathetic, and suggest professional help.\n\n" if crisis else ""
+    response = await client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are Vetchat, a compassionate AI companion for veterans. Be supportive and non-judgmental."},
+            {"role": "user", "content": crisis_prompt + message},
+        ],
+    )
+    return response.choices[0].message.content.strip()
