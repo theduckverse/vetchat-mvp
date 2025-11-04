@@ -7,6 +7,10 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 from .risk import is_crisis
 from .llm import chat_once
+from fastapi import APIRouter
+from pydantic import BaseModel
+from .risk import is_crisis
+from .llm import chat_once
 
 router = APIRouter()
 
@@ -16,6 +20,10 @@ HELP_KEYWORDS = {
     "addiction": "If you're struggling with addiction, the VA offers confidential help: https://www.va.gov/substance-abuse/",
     "suicide": "⚠️ If you are in crisis, please call 988 (press 1) or text 838255 for immediate help.",
     "finances": "For financial assistance and veteran benefits, visit: https://www.va.gov/finance/ or contact your local VA office.",
+    "ptsd": "For PTSD treatment and support, visit: https://www.ptsd.va.gov/ or call the VA’s 24/7 support line at 1-800-273-8255 (press 1).",
+    "jobs": "Veterans can find job and career help at: https://www.va.gov/careers-employment/ or through Hire Heroes USA: https://www.hireheroesusa.org/",
+    "education": "Learn about education benefits (GI Bill and more): https://www.va.gov/education/",
+    "benefits": "Learn about veteran benefits here: https://www.va.gov/",
 }
 
 def detect_resource_link(message: str):
@@ -46,7 +54,6 @@ async def chat(inp: ChatIn):
     reply = await chat_once(inp.message, crisis=crisis)
     return {"reply": reply, "crisis_banner": crisis}
 
-router = APIRouter()
 
 class ChatIn(BaseModel):
     conversation_id: str | None = None
